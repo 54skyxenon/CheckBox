@@ -3,7 +3,9 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
 import DatePicker from 'react-native-datepicker';
+
 import * as firebase from 'firebase';
+import '@firebase/firestore';
 
 export default class SignUp extends React.Component
 {
