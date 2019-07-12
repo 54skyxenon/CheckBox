@@ -3,7 +3,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
 import DatePicker from 'react-native-datepicker';
-
+//import firebase from 'react-native-firebase';
 import * as firebase from 'firebase';
 import '@firebase/firestore';
 
@@ -63,11 +63,10 @@ export default class SignUp extends React.Component
 	validateRegistration = () =>
 	{
 		allFieldsCorrect = this.state.namesFilled && !this.state.usernameExists && this.state.strongPassword && this.state.passwordsMatch;
-		allFieldsFilled = this.state.namesFilled && (this.state.email !== '') && (this.state.username !== '') && (this.state.password !== '') && (this.state.confirmPassword !== '');
+		allFieldsFilled = (this.state.dob !== '') && (this.state.email !== '') && (this.state.username !== '') && (this.state.password !== '') && (this.state.confirmPassword !== '');
 		
 		if (allFieldsCorrect && allFieldsFilled)
 		{
-			this.setState({errorMessage: ''});
 			return true;
 		}
 		else
@@ -90,8 +89,12 @@ export default class SignUp extends React.Component
 					username: this.state.username,
 					first_name: this.state.firstName,
 					last_name: this.state.lastName,
+					dob: this.state.dob,
 					created_at: new Date()
-				})
+				});
+				firebase.firestore().collection("usernames").doc(this.state.username).set({
+					uid: res.user.uid
+				});
 			}).catch(error => this.setState({
 					errorMessage: error.message
 				}));
@@ -213,7 +216,7 @@ export default class SignUp extends React.Component
 				{/* Date field to input DOB */}
 				<DatePicker
 					style={{width: 200}}
-					date={this.state.date}
+					date={this.state.dob}
 					mode="date"
 					placeholder="Birthday"
 					format="YYYY-MM-DD"
@@ -234,7 +237,7 @@ export default class SignUp extends React.Component
 					  }
 					  // ... You can check the source to find the other keys.
 					}}
-					onDateChange={(date) => {this.setState({date: date})}}
+					onDateChange={date => this.setState({dob: date})}
 				/>
 				
 				<Button title="Confirm" onPress={this.handleSignUp} />

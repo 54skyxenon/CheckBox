@@ -1,20 +1,18 @@
 // Main.js
 
 import React from 'react';
-import { StyleSheet, SafeAreaView, Platform, Image, Text, View, TouchableOpacity, ScrollView, Button } from 'react-native';
+import { StyleSheet, SafeAreaView, Platform, Image, Text, View, TouchableOpacity, ActivityIndicator, ScrollView, Button } from 'react-native';
 import { createDrawerNavigator, createStackNavigator, DrawerItems, createAppContainer } from 'react-navigation';
 import { BottomNavigation } from 'react-native-paper';
 import { Icon } from 'react-native-elements';
 
-import firebase from 'firebase';
+// import firebase from 'react-native-firebase';
+import * as firebase from 'firebase';
 import '@firebase/firestore';
 
 import Tasks from '../tasks/Tasks';
 import Profile from '../profile/Profile';
 import Search from '../search/Search';
-
-import { YellowBox } from 'react-native';
-YellowBox.ignoreWarnings(['Setting a timer']);
 
 export default class Main extends React.Component
 {
@@ -63,8 +61,9 @@ export class Activity extends React.Component
   	{
   		super(props);
   		this.componentDidMount = this.componentDidMount.bind(this);
+  		this.componentWillMount = this.componentWillMount.bind(this);
   		this.handleLogout = this.handleLogout.bind(this);
-  		this.state = { currentUser: null, errorMessage: null };
+  		this.state = { currentUser: null, currentUsername: '', errorMessage: null };
 	}
 	
 	componentDidMount()
@@ -73,12 +72,31 @@ export class Activity extends React.Component
     	this.setState({ currentUser });
 	}
 	
+	componentWillMount()
+	{
+		const usersRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
+		
+    	usersRef.get().then(doc =>
+		{
+			if (doc.exists)
+			{
+				this.setState({currentUsername: doc.data().username});
+			}
+			else
+			{
+				alert("No such document!");
+			}
+		}).catch(error => {
+			alert("Error getting document:", error);
+		});
+	}
+	
 	// Log out the user
 	handleLogout()
 	{
 		firebase.auth().signOut()
 		  .then(() => {
-			this.props.navigation.navigate('Login'); // This part fails as well
+			this.props.navigation.navigate('Login');
 		  })
 		  .catch(error => {
 			this.setState({ errorMessage: error.message });
@@ -88,32 +106,19 @@ export class Activity extends React.Component
 	render()
 	{
 		const { currentUser } = this.state;
-		// const usersRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
-		
-		let currentUsername = '';
-		
-		/*
-		usersRef.get().then(doc =>
-		{
-			if (doc.exists)
-			{
-				currentUsername = doc.data().username;
-				currentUsername = (' ' + doc.data().username).slice(1);
-				alert("Current username is: " + currentUsername.toString());
-			}
-			else
-			{
-				alert("No such document!");
-			}
-		}).catch(error => {
-			alert("Error getting document:", error);
-		}); */
 		
 		return (
 			<View style={styles.container}>
-				<Text>
-					Hi @{currentUser && currentUser.email}!
-				</Text>
+				{
+					this.state.currentUsername === '' &&
+					<ActivityIndicator />
+				}
+				{
+					this.state.currentUsername !== '' &&
+					<Text>
+						Hi @{currentUser && this.state.currentUsername}!
+					</Text>
+				}
 				<Button title="Logout" onPress={this.handleLogout} />
 			</View>
 		);

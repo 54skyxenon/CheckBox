@@ -2,7 +2,9 @@
 
 import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button, Image, Linking } from 'react-native';
+//import firebase from 'react-native-firebase';
 import * as firebase from 'firebase';
+import '@firebase/firestore';
 
 export default class Login extends React.Component
 {

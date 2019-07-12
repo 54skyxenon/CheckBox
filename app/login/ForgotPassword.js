@@ -2,7 +2,9 @@
 
 import React from 'react';
 import {Text, TextInput, View, Button, StyleSheet} from 'react-native';
+//import firebase from 'react-native-firebase';
 import * as firebase from 'firebase';
+import '@firebase/firestore';
 
 export default class ForgotPassword extends React.Component
 {
