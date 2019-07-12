@@ -14,8 +14,8 @@ export default class SignUp extends React.Component
 		super(props);
 		
 		this.state = {firstName: '', lastName: '', username: '', email: '', password: '', confirmPassword: '',  dob: '',  // state variables for fields
-						namesFilled: true, usernameExists: false, strongPassword: true, passwordsMatch: true,
-						 errorMessage: null}; // state variables for field validation
+						namesFilled: true, usernameExists: false, strongPassword: true, passwordsMatch: true, // state variables for field validation
+						 errorMessage: null};
 		
 		this.setStrongPassword = this.setStrongPassword.bind(this);
 		this.setNamesFilled = this.setNamesFilled.bind(this);
@@ -52,6 +52,7 @@ export default class SignUp extends React.Component
 		this.setState({passwordsMatch: password === confirmPassword});
 	}
 	
+	// TODO: Fix bug that crashes when the username becomes blank
 	setUsernameAvailability = (username) =>
 	{
 		const usersRef = firebase.firestore().collection('usernames').doc(username);
@@ -60,6 +61,7 @@ export default class SignUp extends React.Component
 		});
 	}
 	
+	// TODO: Add phone number input
 	validateRegistration = () =>
 	{
 		allFieldsCorrect = this.state.namesFilled && !this.state.usernameExists && this.state.strongPassword && this.state.passwordsMatch;

@@ -1,13 +1,12 @@
-# **Checkbox** 
+# **CheckBox** 
 <img src="./assets/UI-Sketches/logo.png" width="200" height="200" title="CheckBox Logo">
 
 ### Main functionality: send and receive tasks to and from friends.
-CheckBox is built using React Native with a Firebase backend, defaulting to using the `yarn` package manager (as opposed to `npm`). To test Android: `emulator @Nexus_5X_API_Q` (to connect the emulator) then `yarn run android`. To test iOS: `yarn run ios`.
+CheckBox is built using React Native with a Firebase backend, defaulting to using the `npm` package manager. We are using the Expo client with `create-react-native-app` to run the app. To test, run `npm start` and scan the QR with the Expo client app. To test on native emulators, press i for iOS and a for Android (after you've run `emulator @Nexus_5X_API_Q`).
 
 Ways to deal with errors:
 
 * EACCES Permission denied: `sudo chown -R $USER ~/.npm`
-* Command Shift K in Xcode
 
 Permissions needed:
 
