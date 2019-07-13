@@ -55,16 +55,24 @@ export default class SignUp extends React.Component
 	// TODO: Fix bug that crashes when the username becomes blank
 	setUsernameAvailability = (username) =>
 	{
-		const usersRef = firebase.firestore().collection('usernames').doc(username);
-		usersRef.get().then(docSnapshot => {
-		  	this.setState({usernameExists: docSnapshot.exists});
-		});
+		if (username !== '')
+		{
+			const usersRef = firebase.firestore().collection('usernames').doc(username);
+			usersRef.get().then(docSnapshot => {
+				this.setState({usernameExists: docSnapshot.exists});
+			});
+		}
+	}
+	
+	usernameHasWhitespace = () =>
+	{
+		return this.state.username.indexOf(' ') >= 0;
 	}
 	
 	// TODO: Add phone number input
 	validateRegistration = () =>
 	{
-		allFieldsCorrect = this.state.namesFilled && !this.state.usernameExists && this.state.strongPassword && this.state.passwordsMatch;
+		allFieldsCorrect = this.state.namesFilled && !this.state.usernameExists && !this.usernameHasWhitespace() && this.state.strongPassword && this.state.passwordsMatch;
 		allFieldsFilled = (this.state.dob !== '') && (this.state.email !== '') && (this.state.username !== '') && (this.state.password !== '') && (this.state.confirmPassword !== '');
 		
 		if (allFieldsCorrect && allFieldsFilled)
@@ -173,6 +181,11 @@ export default class SignUp extends React.Component
 				{
 					this.state.usernameExists &&
 					<Text style={{color: 'red'}}> Username taken! </Text>
+				}
+				
+				{
+					this.usernameHasWhitespace() &&
+					<Text style={{color: 'red'}}> Username cannot have spaces! </Text>
 				}
 				
 				{/* Text field to input password */}

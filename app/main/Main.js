@@ -6,7 +6,6 @@ import { createDrawerNavigator, createStackNavigator, DrawerItems, createAppCont
 import { BottomNavigation } from 'react-native-paper';
 import { Icon } from 'react-native-elements';
 
-// import firebase from 'react-native-firebase';
 import * as firebase from 'firebase';
 import '@firebase/firestore';
 
