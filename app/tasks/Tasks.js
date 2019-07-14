@@ -6,11 +6,6 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import InfoScreen from '../main/InfoScreen';
 import TaskCreate from './TaskCreate';
 
-import {YellowBox} from 'react-native';
-
-// Ignore the stupid RN Navigation 3.0+ warning
-YellowBox.ignoreWarnings(['You should only render one navigator explicitly in your app']);
-
 class TaskScreen extends React.Component
 {
   render() {

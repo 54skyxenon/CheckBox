@@ -77,7 +77,6 @@ export default class Login extends React.Component
 				<Text> By clicking "Sign Up", you agree to the following: </Text>
 				<Button title="Terms of Use" onPress={() => {Linking.openURL("https://google.com")}} />
 				<Button title="Privacy Policy" onPress={() => {Linking.openURL("https://google.com")}} />
-				<Button title="Data Policy" onPress={() => {Linking.openURL("https://google.com")}} />
 			</View>
     	);
   	}

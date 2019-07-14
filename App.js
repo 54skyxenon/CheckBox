@@ -11,6 +11,11 @@ import Login from './app/login/Login';
 import ForgotPassword from './app/login/ForgotPassword';
 import Main from './app/main/Main';
 
+import {YellowBox} from 'react-native';
+
+YellowBox.ignoreWarnings(['You should only render one navigator explicitly in your app']);
+YellowBox.ignoreWarnings(['Setting a timer']);
+
 import * as firebase from 'firebase';
 
 // Initialize Firebase
