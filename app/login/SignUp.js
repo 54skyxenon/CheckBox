@@ -74,13 +74,6 @@ export default class SignUp extends React.Component
 		}
 		else
 		{
-			// allFieldsCorrect is not accurate
-			// this is problematic
-			if (!this.state.namesFilled)
-			{
-				alert('names not all filled!');
-			}
-			
 			this.setState({errorMessage: 'Some fields are missing/incorrect.'})
 			return false;
 		}
