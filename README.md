@@ -4,51 +4,42 @@
 ### Main functionality: send and receive tasks to and from friends.
 CheckBox is built using React Native with a Firebase backend, defaulting to using the `npm` package manager. We are using the Expo client with `create-react-native-app` to run the app. To test, run `npm start` and scan the QR with the Expo client app. To test on native emulators, press `i` for iOS and `a` for Android (after you've run `emulator @Nexus_5X_API_Q`).
 
-##Solving Common Errors:
+## Solving Common Errors:
 
 * EACCES Permission denied: `sudo chown -R $USER ~/.npm`
 
-##Permissions:
+## Permissions:
 
 * Camera
 * Coarse Location
 * File Access
 
 <img src="./assets/UI-Sketches/login.png" title="Login Screen">
---
 <img src="./assets/UI-Sketches/register.png" title="Register Screen">
---
 <img src="./assets/UI-Sketches/activity.png" title="Activity Screen">
---
 <img src="./assets/UI-Sketches/profile.png" title="Profile Screen">
---
 <img src="./assets/UI-Sketches/profile-menu.png" title="Profile Menu">
---
 <img src="./assets/UI-Sketches/tasks.png" title="Tasks Screen">
---
 <img src="./assets/UI-Sketches/create-task.png" title="Create Task Screen">
---
 <img src="./assets/UI-Sketches/add-participants.png" title="Add Participants Screen">
---
 <img src="./assets/UI-Sketches/info.png" title="Info Screen">
---
 <img src="./assets/UI-Sketches/search.png" title="Search Screen">
 
-##Layout:
+## Layout:
 
 * See Instagram's layout for reference. It will have a navigation bar at the bottom with the following pages: News (with a search bar at the top), Tasks (includes search bar at the top), Search, Profile.
 
-##Pages: 
+## Pages: 
 
 * News: Like Facebook news. Each recent post includes a friend's name (this is the person who completed the task), below that their task description + **sent by**: *sender*, below that the proof of completion, either a photo or video. These posts can be liked/upvoted and commented on.
 * Tasks: Split into two parts - incomplete outbound tasks and incomplete inbound tasks. Will also have a button to create a new task.
 * Search: Search for peoples' profiles, where you can add them as a friend, see their statistics, see their friends and view their public completed tasks.
 * Profile: Your profile picture (taken in the moment or selected from stored personal photos), completed tasks, friends, statistics, settings.
 
-##Sign-up: 
+## Sign-up: 
 First name, Last name, Username, Date of Birth, E-mail. Must agree to Terms and Conditions and Privacy Policy. 
 
-##Features:
+## Features:
 
 * <b>Anonymity</b>: Task senders can make his or herself anonymous until completion of the task, whether sent privately or publicly. Once the other party completes the task by sending proof of completion, the sender's identity will be uncovered.
 
@@ -68,14 +59,12 @@ First name, Last name, Username, Date of Birth, E-mail. Must agree to Terms and 
 
 * <b>Searching</b>: You can search by real name or username.
 
-##Data Collection: 
-####We will collect data that we can then rent out to companies for profit. Keep track of anything useful.
+## Data Collection: 
+
+#### We will collect data that we can then rent out to companies for profit. Keep track of anything useful.
 
 * Age (from birthday)
 * Number of tasks created a day (overall and per person on a daily, weekly, and monthly basis)
 * Task categories and how common they are: games, music, food, culture, religious, etc. + tasks in each category (TBD with MLKit)
 * Number of tasks with more than 2 participants
 * Etc.
-
-
-
