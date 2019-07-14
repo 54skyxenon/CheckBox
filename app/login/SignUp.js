@@ -62,7 +62,6 @@ export default class SignUp extends React.Component
 		return this.state.username.indexOf(' ') >= 0;
 	}
 	
-	// TODO: Add phone number input
 	validateRegistration = () =>
 	{
 		allFieldsCorrect = !this.state.usernameExists && !this.usernameHasWhitespace() && this.state.strongPassword && this.state.passwordsMatch;
