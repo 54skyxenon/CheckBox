@@ -14,11 +14,10 @@ export default class SignUp extends React.Component
 		super(props);
 		
 		this.state = {firstName: '', lastName: '', username: '', email: '', password: '', confirmPassword: '',  dob: '',  // state variables for fields
-						namesFilled: true, usernameExists: false, strongPassword: true, passwordsMatch: true, // state variables for field validation
+						usernameExists: false, strongPassword: true, passwordsMatch: true, // state variables for field validation
 						 errorMessage: null};
 		
 		this.setStrongPassword = this.setStrongPassword.bind(this);
-		this.setNamesFilled = this.setNamesFilled.bind(this);
 		this.setUsernameFilled = this.setUsernameFilled.bind(this);
 		this.setPasswordsMatch = this.setPasswordsMatch.bind(this);
 		this.setUsernameAvailability = this.setUsernameAvailability.bind(this);
@@ -37,11 +36,6 @@ export default class SignUp extends React.Component
 		this.setState({strongPassword: sufficientLength && hasLowercase && hasUppercase && hasDigit});
 	}
 	
-	setNamesFilled = () =>
-	{
-		this.setState({namesFilled: this.state.firstName !== '' && this.state.lastName !== ''});
-	}
-	
 	setUsernameFilled = () =>
 	{
 		this.setState({namesFilled: this.state.username !== ''});
@@ -52,7 +46,6 @@ export default class SignUp extends React.Component
 		this.setState({passwordsMatch: password === confirmPassword});
 	}
 	
-	// TODO: Fix bug that crashes when the username becomes blank
 	setUsernameAvailability = (username) =>
 	{
 		if (username !== '')
@@ -72,8 +65,8 @@ export default class SignUp extends React.Component
 	// TODO: Add phone number input
 	validateRegistration = () =>
 	{
-		allFieldsCorrect = this.state.namesFilled && !this.state.usernameExists && !this.usernameHasWhitespace() && this.state.strongPassword && this.state.passwordsMatch;
-		allFieldsFilled = (this.state.dob !== '') && (this.state.email !== '') && (this.state.username !== '') && (this.state.password !== '') && (this.state.confirmPassword !== '');
+		allFieldsCorrect = !this.state.usernameExists && !this.usernameHasWhitespace() && this.state.strongPassword && this.state.passwordsMatch;
+		allFieldsFilled = (this.state.firstName !== '') && (this.state.lastName !== '') && (this.state.dob !== '') && (this.state.email !== '') && (this.state.username !== '') && (this.state.password !== '');
 		
 		if (allFieldsCorrect && allFieldsFilled)
 		{
@@ -81,6 +74,13 @@ export default class SignUp extends React.Component
 		}
 		else
 		{
+			// allFieldsCorrect is not accurate
+			// this is problematic
+			if (!this.state.namesFilled)
+			{
+				alert('names not all filled!');
+			}
+			
 			this.setState({errorMessage: 'Some fields are missing/incorrect.'})
 			return false;
 		}
@@ -137,7 +137,6 @@ export default class SignUp extends React.Component
 					  style={styles.miscTextInput}
 					  onChangeText={firstName => {
 					  	this.setState({ firstName });
-						this.setNamesFilled();
 					}}
 					  value={this.state.firstName}
 					/>
@@ -149,7 +148,6 @@ export default class SignUp extends React.Component
 					  style={styles.miscTextInput}
 					  onChangeText={lastName => {
 						this.setState({ lastName });
-						this.setNamesFilled();
 					}}
 					  value={this.state.lastName}
 					/>

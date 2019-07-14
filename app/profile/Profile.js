@@ -5,8 +5,37 @@ import { StyleSheet, Platform, Image, ScrollView, SafeAreaView, Text, View, Butt
 import { createAppContainer, createStackNavigator, createDrawerNavigator, DrawerItems } from 'react-navigation'
 import ProfileTabs from './ProfileTabs'
 
+import * as firebase from 'firebase';
+import '@firebase/firestore';
+
 export class Profile extends React.Component
 {
+	constructor(props)
+	{
+		super(props);
+		this.state = { currentName: 'Name', currentUsername: 'Username' };
+	}
+
+	componentWillMount()
+	{
+		const usersRef = firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid);
+		
+    	usersRef.get().then(doc =>
+		{
+			if (doc.exists)
+			{
+				this.setState({	currentName: doc.data().first_name + ' ' + doc.data().last_name,
+								currentUsername: doc.data().username });
+			}
+			else
+			{
+				alert("No such document!");
+			}
+		}).catch(error => {
+			alert("Error getting document:", error);
+		});
+	}
+
 	render()
 	{
 		return (<SafeAreaView style={styles.container}>
@@ -16,8 +45,8 @@ export class Profile extends React.Component
 								style={{width: 100, height: 100, marginBottom: 10}}
 								source={require('../../assets/pfp.png')}
 							/>
-							<Text style={{marginBottom: 10}}>Name</Text>
-							<Text style={{marginBottom: 10}}>Username</Text>
+							<Text style={{marginBottom: 10}}> {this.state.currentName} </Text>
+							<Text style={{marginBottom: 10}}> @{this.state.currentUsername} </Text>
 						</View>
 						<ProfileTabs />
 					</ScrollView>
