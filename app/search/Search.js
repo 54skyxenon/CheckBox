@@ -4,6 +4,9 @@ import React from 'react';
 import { StyleSheet, SafeAreaView, ActivityIndicator, Platform, Image, Text, View, Button, FlatList } from 'react-native';
 import { List, ListItem, SearchBar } from 'react-native-elements';
 
+import * as firebase from 'firebase';
+import '@firebase/firestore';
+
 export default class Search extends React.Component
 {
 	render()
@@ -32,18 +35,16 @@ export class SearchContent extends React.Component
 
   	makeRequest = () =>
   	{
-    	const url = 'https://randomuser.me/api/?&results=20';
+    	const query = firebase.firestore().collection("users");
     	this.setState({ loading: true });
 
-    	fetch(url)
-		.then(res => res.json())
-		.then(res => {
-        	this.setState({ data: res.results, error: res.error || null, loading: false });
-        	this.arrayholder = res.results;
-      	})
-      	.catch(error => {
-        	this.setState({ error, loading: false });
-      	});
+			query.orderBy('first_name').get().then(querySnapshot => {
+			  querySnapshot.forEach(documentSnapshot => {
+					this.arrayholder.push(documentSnapshot);
+			  });
+			});
+
+			this.setState({ data: this.arrayholder, loading: false });
   	}
 
   	renderSeparator = () =>
@@ -61,12 +62,12 @@ export class SearchContent extends React.Component
 
     	const newData = this.arrayholder.filter(item => {
 			const itemData = `${item.name.title.toUpperCase()} ${item.name.first.toUpperCase()} ${item.name.last.toUpperCase()}`;
-			
+
       		const textData = text.toUpperCase();
 
       		return itemData.indexOf(textData) > -1;
     	});
-		
+
     	this.setState({ data: newData });
   	}
 
@@ -94,19 +95,23 @@ export class SearchContent extends React.Component
 				</View>
 			);
 		}
-		
+
+		// Each query item for a user is a documentSnapshot
+		// To get field: user.get('email')
+		// To get uid: user.id
+
 		return (
 			<View style={{ flex: 1 }}>
 				<FlatList
 			  		data={this.state.data}
 					renderItem={({ item }) => (
 						<ListItem
-				  			leftAvatar={{ source: { uri: item.picture.thumbnail } }}
-				  			title={`${item.name.first} ${item.name.last}`}
-				  			subtitle={item.email}
+				  			leftAvatar={{ source: require('../../assets/pfp.png')  }}
+				  			title={`${item.get('first_name')} ${item.get('last_name')}`}
+				  			subtitle={item.get('email')}
 						/>
 			  		)}
-					keyExtractor={item => item.email}
+					keyExtractor={item => item.get("email")}
 					ItemSeparatorComponent={this.renderSeparator}
 					ListHeaderComponent={this.renderHeader}
 				/>
@@ -114,5 +119,3 @@ export class SearchContent extends React.Component
 		);
   	}
 }
-
-

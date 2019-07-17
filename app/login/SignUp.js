@@ -1,7 +1,7 @@
 // SignUp.js
 
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Image, ScrollView, Linking, KeyboardAvoidingView } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 //import firebase from 'react-native-firebase';
 import * as firebase from 'firebase';
@@ -12,40 +12,40 @@ export default class SignUp extends React.Component
 	constructor(props)
 	{
 		super(props);
-		
+
 		this.state = {firstName: '', lastName: '', username: '', email: '', password: '', confirmPassword: '',  dob: '',  // state variables for fields
 						usernameExists: false, strongPassword: true, passwordsMatch: true, // state variables for field validation
 						 errorMessage: null};
-		
+
 		this.setStrongPassword = this.setStrongPassword.bind(this);
 		this.setUsernameFilled = this.setUsernameFilled.bind(this);
 		this.setPasswordsMatch = this.setPasswordsMatch.bind(this);
 		this.setUsernameAvailability = this.setUsernameAvailability.bind(this);
-		
+
 		this.validateRegistration = this.validateRegistration.bind(this);
 		this.handleSignUp = this.handleSignUp.bind(this);
 	}
-	
+
 	setStrongPassword = (password) =>
 	{
 		sufficientLength = (password.length >= 8);
 		hasLowercase = (/[a-z]/.test(password));
 		hasUppercase = (/[A-Z]/.test(password));
 		hasDigit = (/[0-9]/.test(password));
-		
+
 		this.setState({strongPassword: sufficientLength && hasLowercase && hasUppercase && hasDigit});
 	}
-	
+
 	setUsernameFilled = () =>
 	{
 		this.setState({namesFilled: this.state.username !== ''});
 	}
-	
+
 	setPasswordsMatch = (password, confirmPassword) =>
 	{
 		this.setState({passwordsMatch: password === confirmPassword});
 	}
-	
+
 	setUsernameAvailability = (username) =>
 	{
 		if (username !== '')
@@ -56,17 +56,17 @@ export default class SignUp extends React.Component
 			});
 		}
 	}
-	
+
 	usernameHasWhitespace = () =>
 	{
 		return this.state.username.indexOf(' ') >= 0;
 	}
-	
+
 	validateRegistration = () =>
 	{
 		allFieldsCorrect = !this.state.usernameExists && !this.usernameHasWhitespace() && this.state.strongPassword && this.state.passwordsMatch;
 		allFieldsFilled = (this.state.firstName !== '') && (this.state.lastName !== '') && (this.state.dob !== '') && (this.state.email !== '') && (this.state.username !== '') && (this.state.password !== '');
-		
+
 		if (allFieldsCorrect && allFieldsFilled)
 		{
 			return true;
@@ -77,7 +77,7 @@ export default class SignUp extends React.Component
 			return false;
 		}
 	}
-	
+
 	// Register user and add his/her UID to Firestone
 	handleSignUp = () =>
 	{
@@ -102,26 +102,26 @@ export default class SignUp extends React.Component
 				}));
 		}
 	}
-	
+
 	render()
 	{
 		return (
-			<View style={styles.container}>
-
+			<KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+			<ScrollView>
 				<Image
 					style={{width: 250, height: 250}}
           			source={require('../../assets/UI-Sketches/logo.png')}
         		/>
-				
+
         		{
 					this.state.errorMessage &&
 					<Text style={{ color: 'red' }}>
             			{this.state.errorMessage}
           			</Text>
 				}
-				
+
 				<View style={{ flexDirection: 'row' }}>
-				
+
 					{/* Text field to input first name */}
 					<TextInput
 					  placeholder="First Name"
@@ -132,7 +132,7 @@ export default class SignUp extends React.Component
 					}}
 					  value={this.state.firstName}
 					/>
-				
+
 					{/* Text field to input last name */}
 					<TextInput
 					  placeholder="Last Name"
@@ -143,9 +143,9 @@ export default class SignUp extends React.Component
 					}}
 					  value={this.state.lastName}
 					/>
-					
+
 				</View>
-				
+
 				{/* Text field to input email */}
 				<TextInput
 					placeholder="Email (use this to log in)"
@@ -154,7 +154,7 @@ export default class SignUp extends React.Component
 					onChangeText={email => this.setState({ email })}
           			value={this.state.email}
 				/>
-				
+
 				{/* Text field to input username */}
 				<TextInput
 					placeholder="Username (others will see this)"
@@ -167,17 +167,17 @@ export default class SignUp extends React.Component
 						}}
           			value={this.state.username}
 				/>
-				
+
 				{
 					this.state.usernameExists &&
 					<Text style={{color: 'red'}}> Username taken! </Text>
 				}
-				
+
 				{
 					this.usernameHasWhitespace() &&
 					<Text style={{color: 'red'}}> Username cannot have spaces! </Text>
 				}
-				
+
 				{/* Text field to input password */}
 				<TextInput
 				  secureTextEntry={true}
@@ -192,12 +192,12 @@ export default class SignUp extends React.Component
 				  }
 				  value={this.state.password}
 				/>
-				
+
 				{
 					!this.state.strongPassword &&
 					<Text style={{color: 'red'}}> Must have at least 8 characters, one uppercase letter, one lowercase letter, and one digit. </Text>
 				}
-				
+
 				{/* Text field to confirm password */}
 				<TextInput
 				  secureTextEntry={true}
@@ -212,12 +212,12 @@ export default class SignUp extends React.Component
 				}
 				  value={this.state.confirmPassword}
 				/>
-				
+
 				{
 					!this.state.passwordsMatch &&
 					<Text style={{color: 'red'}}> Passwords do not match. </Text>
 				}
-				
+
 				{/* Date field to input DOB */}
 				<DatePicker
 					style={{width: 200}}
@@ -231,26 +231,39 @@ export default class SignUp extends React.Component
 					cancelBtnText="Cancel"
 					customStyles={{
 					  dateIcon: {
-						position: 'absolute',
-						left: 0,
-						top: 4,
-						marginLeft: 0
+							position: 'absolute',
+							left: 0,
+							top: 4,
+							marginLeft: 0
 					  },
 					  dateInput: {
-						marginLeft: 36,
-						borderRadius: 5
+							marginLeft: 36,
+							borderRadius: 5
 					  }
-					  // ... You can check the source to find the other keys.
 					}}
 					onDateChange={date => this.setState({dob: date})}
 				/>
-				
-				<Button title="Confirm" onPress={this.handleSignUp} />
+
+				<Button
+					title="Confirm"
+					onPress={this.handleSignUp}
+				/>
 				<Button
 					title="Already have an account? Login"
 					onPress={() => this.props.navigation.navigate('Login')}
 				/>
-			</View>
+
+				<Text style={{margin: 10}}> By signing up, you agree to the following: </Text>
+				<Button
+					title="Terms of Use"
+					onPress={() => {Linking.openURL("https://google.com")}}
+				/>
+				<Button
+					title="Privacy Policy"
+					onPress={() => {Linking.openURL("https://google.com")}}
+				/>
+			</ScrollView>
+			</KeyboardAvoidingView>
 		);
 	}
 }
